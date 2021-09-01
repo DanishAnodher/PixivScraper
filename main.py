@@ -1,7 +1,9 @@
+#   Author  :   CodeSenpaiii
+
 from pixiv import *
 
 def main():
-    ArtistID = input("Artist's iD : ")
+    ArtistID = input("Artist's ID : ")
     illustrations = getImageIds(ArtistID)
     total_illusts = len(illustrations)
     print(f"[INFO] Illustrations Found = {total_illusts}")
@@ -14,3 +16,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
