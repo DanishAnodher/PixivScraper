@@ -50,6 +50,7 @@ def download(url : str, ArtistID, ImgName):
 
     if not os.path.exists('images'):
         os.mkdir('images')
+    if not os.path.exists(f'images/{ArtistID}'):
         os.mkdir(f'images/{ArtistID}')
 
     with open(f"images/{ArtistID}/{ImgName}","wb") as w:
