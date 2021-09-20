@@ -41,17 +41,23 @@ def getImageLink(ImgID : int, ArtistID : int):
     return links
 
 def download(url : str, ArtistID, ImgName):
-    headers = {
-        'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
-        'Accept-Encoding': None,
-        'Referer' : 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=' + str(ArtistID)
-    }
-    response = requests.get(url, stream=True, headers = headers)
+    try:
+        headers = {
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)',
+            'Accept-Encoding': None,
+            'Referer' : 'https://www.pixiv.net/member_illust.php?mode=medium&illust_id=' + str(ArtistID)
+        }
+        response = requests.get(url, stream=True, headers = headers)
 
-    if not os.path.exists('images'):
-        os.mkdir('images')
-    if not os.path.exists(f'images/{ArtistID}'):
-        os.mkdir(f'images/{ArtistID}')
+        if not os.path.exists('images'):
+            os.mkdir('images')
+        if not os.path.exists(f'images/{ArtistID}'):
+            os.mkdir(f'images/{ArtistID}')
 
-    with open(f"images/{ArtistID}/{ImgName}","wb") as w:
-        w.write(response.content)
+        with open(f"images/{ArtistID}/{ImgName}","wb") as w:
+            w.write(response.content)
+    except Exception() as e:
+        print("[Err] An Error Occured... Exited")
+        if os.path.exists(f'images/{ArtistID}/{ImgName}'):
+            os.remove(f'images/{ArtistID}/{ImgName}')
+        exit()
