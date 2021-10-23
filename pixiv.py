@@ -8,6 +8,11 @@ def getImageIds(UID : int):
     illusts = list(response.json()['body']['illusts'])
     return illusts
 
+def isDuplicate(file, folder):
+    if os.path.exists(f'images/{folder}/{file}'):
+        return True
+    return False
+
 def getImageLink(ImgID : int, ArtistID : int):
     baseurl = f"https://www.pixiv.net/en/artworks/{ImgID}"
     response = requests.get(baseurl).text
