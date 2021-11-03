@@ -1,4 +1,4 @@
-# ZeroPixivDownloader
+# ZeroPixivScraper
 
 ## Requirements
 * Python3 Download Python3 from https://www.python.org/downloads/
