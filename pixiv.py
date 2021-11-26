@@ -5,8 +5,13 @@ from tqdm import tqdm
 
 def getImageIds(UID : int):
     baseurl = f"https://www.pixiv.net/ajax/user/{UID}/profile/all?lang=en"
-    response = requests.get(baseurl)
-    illusts = list(response.json()['body']['illusts'])
+    ajax = requests.get(baseurl).json()
+    error = ajax['error']
+    if error:
+        print(ajax['message'])
+        exit()
+    else:
+        illusts = list(ajax['body']['illusts'])
     return illusts
 
 def isDuplicate(file, folder):
@@ -19,10 +24,10 @@ def getImageLink(ImgID : int, ArtistID : int):
     response = requests.get(baseurl).text
     soup = str(BeautifulSoup(response, "lxml"))
     links = []
-
+    
     start = soup.find("original")
     end = soup.find("tags")
-    
+
     links.append(soup[start + 11:end - 4])
     
     start = links[0].split('_')[0]
@@ -62,15 +67,14 @@ def download(url : str, ArtistID, ImgName, title):
             os.mkdir(f'images/{ArtistID}')
 
         with open(f"images/{ArtistID}/{ImgName}","wb") as w:
-            with tqdm(total=content_length, unit="B", unit_scale=True, desc=title, initial=0, ascii=True) as pbar:
+            with tqdm(total=content_length, unit="B", unit_scale=True, desc=title, initial=0, ncols=80) as pbar:
                 for chunk in response.iter_content(chunk_size=1024):         
                     if chunk:
                         w.write(chunk) 
                         pbar.update(len(chunk))
     
     except Exception as e:
-        print("[Err] An Error Occured...")
-        print("[INFO] ",e)
+        print("[Err] An Error Occured While Downloading Image "+ImgName.split('.')[0])
+        print("Download Manually : https://www.pixiv.net/en/artworks/"+ImgName.split('_')[0])
         if os.path.exists(f'images/{ArtistID}/{ImgName}'):
             os.remove(f'images/{ArtistID}/{ImgName}')
-        exit()
